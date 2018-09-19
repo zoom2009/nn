@@ -32,13 +32,35 @@ var StudentSchema = new Schema({
 })
 
 
+var CarSchema = new Schema({
+    carID: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    brand: {
+        type: String,
+        required: true
+    },
+    owner: {
+        type: String,
+        required: true
+    },
+    prize: {
+        type: Number,
+        required: true
+    }
+})
+
 
 var Student = mongoose.model('Student', StudentSchema)
+var Car = mongoose.model('Car', CarSchema)
+
 
 var app = express() // เรียกใช้เสมอ ถ้าใช้ express
 app.use(bodyParser.json())
 
-app.get('/get', (req, res) => {
+app.get('/getStudent', (req, res) => {
     Student.find().then((doc) => {
         res.send(doc)
     }, (err) => {
@@ -46,7 +68,7 @@ app.get('/get', (req, res) => {
     })
 })
 
-app.post('/post', (req, res) => {
+app.post('/postStudent', (req, res) => {
     let newStudent = new Student({
         id: req.body.id,
         firstName: req.body.firstName,
@@ -54,6 +76,28 @@ app.post('/post', (req, res) => {
         age: req.body.age
     })
     newStudent.save().then((doc) => {
+        res.send(doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
+app.get('/getCar', (req, res) => {
+    Car.find().then((doc) => {
+        res.send(doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
+app.post('/postCar', (req, res) => {
+    let newCar = new Car({
+        carID: req.body.carID,
+        brand: req.body.brand,
+        owner: req.body.owner,
+        prize: req.body.prize
+    })
+    newCar.save().then((doc) => {
         res.send(doc)
     }, (err) => {
         res.status(400).send(err)
